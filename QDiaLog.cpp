@@ -6,7 +6,6 @@
 #include<QLineEdit>
 #include<QHBoxLayout>
 #include<QVBoxLayout>
-#include <QTextCodec>
 
 //void QObject::findClicked()
 // {
