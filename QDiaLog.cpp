@@ -75,7 +75,7 @@ int main(int argc, char*argv[])
 
 /*******************************widget show*****************************************/
     window->setFixedHeight(window->sizeHint().height());
-    window->show();  //show widget
+    window->show(); //show widget
 
     return app.exec();
 }
