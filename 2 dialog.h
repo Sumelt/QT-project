@@ -4,7 +4,7 @@
 #include <QDialog>
 
 namespace Ui {
-class Dialog;
+class Dialog;  //这是由设计师生成的类，包含在空间命名Ui中
 }
 
 class Dialog : public QDialog
@@ -16,7 +16,7 @@ public:
     ~Dialog();
     
 private:
-    Ui::Dialog *ui;
+    Ui::Dialog *ui;  //使用命名空间：：成员 生成ui 
 };
 
 #endif // DIALOG_H
