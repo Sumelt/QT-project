@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "SpreadSheet.h"
 #include "ui_mainwindow.h"
 /*
 MainWindow::MainWindow(QWidget *parent) :
@@ -25,10 +26,14 @@ MainWindow::MainWindow()
     CreateStatusBar();
 
     setWindowTitle("MY SpreadSheet");
+    setWindowIcon(QIcon("./img/myico.ico"));
+
     resize(1000,500);
     move(250,250);
 }
 
+
+/**CreateMenu And Add Action**/
 void MainWindow::CreateMenu()
 {
     /**file**/
@@ -40,7 +45,7 @@ void MainWindow::CreateMenu()
     FileMenu->addSeparator();
     FileMenu->addAction(exitFile);
 
-    //;
+
     /**edit**/
     EditMenu = menuBar()->addMenu("&Edit");
     EditMenu->addAction(cutEdit);
@@ -66,8 +71,8 @@ void MainWindow::CreateMenu()
 
     /**option**/
     OptionMenu = menuBar()->addMenu("&Option");
-    OptionMenu->addAction(NoneOption);
-    //OptionMenu->addAction(autorecalOption);
+    OptionMenu->addAction(showGridOption);
+    OptionMenu->addAction(autoRecalcOption);
 
     /**help**/
     HelpMenu = menuBar()->addMenu("&Help");
@@ -76,6 +81,7 @@ void MainWindow::CreateMenu()
 
 }
 
+/**Create ALL Action**/
 void MainWindow::CreateAction()
 {
     CreateFileAction();
@@ -85,6 +91,8 @@ void MainWindow::CreateAction()
     CreateAboutAction();
 }
 
+
+/**File Action**/
 void MainWindow::CreateFileAction()
 {
     newFile = new QAction("&New", this);
@@ -110,10 +118,12 @@ void MainWindow::CreateFileAction()
     exitFile = new QAction("&Exit", this);
     exitFile->setShortcut(QKeySequence::Close);
     exitFile->setStatusTip("Exit SpreadSheeet");
-
+    connect(exitFile, SIGNAL(triggered()), this, SLOT(close()));
 
 }
 
+
+/**Edit Action**/
 void MainWindow::CreateEditAction()
 {
     cutEdit = new QAction("&Cut", this);
@@ -129,7 +139,7 @@ void MainWindow::CreateEditAction()
     pasteEdit = new QAction("&Paste", this);
     pasteEdit->setIcon(QIcon("./img/paste.png"));
     pasteEdit->setShortcut(QKeySequence::Paste);
-    pasteEdit->setStatusTip("paste Data");
+    pasteEdit->setStatusTip("Paste Data");
 
     deleteEdit = new QAction("&Delete", this);
     deleteEdit->setShortcut(QKeySequence::Delete);
@@ -143,13 +153,14 @@ void MainWindow::CreateEditAction()
     findEdit = new QAction("&Find", this);
     findEdit->setIcon(QIcon("./img/find.png"));
     findEdit->setShortcut(QKeySequence::Find);
-    findEdit->setStatusTip("find Data");
+    findEdit->setStatusTip("Find Data");
 
     gotocellEdit = new QAction("&GoTo Cell", this);
     gotocellEdit->setIcon(QIcon("./img/gotocell.png"));
-    gotocellEdit->setStatusTip("gotocell Data");
+    gotocellEdit->setStatusTip("Gotocell Data");
 }
 
+/**Tool Action**/
 void MainWindow::CreateToolsAction()
 {
     recalTools = new QAction("&Recalculate", this);
@@ -160,18 +171,34 @@ void MainWindow::CreateToolsAction()
     sortTools->setStatusTip("Sort");
 }
 
+
+/**Option Action**/
 void MainWindow::CreateOptionAction()
 {
-    NoneOption = new QAction("&NoneOption", this);
-
+    showGridOption = new QAction(tr("&Show Grid"), this);
+    showGridOption->setCheckable(true);
+    //showGridOption->setChecked(spreadsheet->showGrid());
+    showGridOption->setStatusTip(tr("Show or hide the spreadsheet's "
+                                        "grid"));
+    autoRecalcOption = new QAction("&Auto-Recalculate", this);
+    autoRecalcOption = new QAction(tr("&Auto-Recalculate"), this);
+    autoRecalcOption->setCheckable(true);
+    //autoRecalcOption->setChecked(spreadsheet->autoRecalculate());
+    autoRecalcOption->setStatusTip(tr("Switch auto-recalculation on or "
+                                          "off"));
 }
 
+
+/**About Action**/
 void MainWindow::CreateAboutAction()
 {
     aboutHelp = new QAction("&About", this);
-
+    aboutHelp->setCheckable(true);
+    connect(aboutHelp, SIGNAL(triggered()), this, SLOT(aboutInfoMBox()));
 }
 
+
+/**ToolBar Action**/
 void MainWindow::CreateToolBar()
 {
     FileToolBar = addToolBar("&File");
@@ -188,7 +215,24 @@ void MainWindow::CreateToolBar()
 
 }
 
+void MainWindow::updataBarPosition()
+{
+    LocationLable->setText(mytable->GetCurrentStatusBar());
+}
+
 void MainWindow::CreateStatusBar()
 {
-    statusBar();
+    LocationLable = new QLabel("W99");
+    statusBar()->addWidget(LocationLable);
+    connect(mytable, SIGNAL(currentCellChanged(int,int,int,int)), this, SLOT(updataBarPosition()));
 }
+
+
+void MainWindow::aboutInfoMBox()
+{
+    QMessageBox::about(this, tr("About"),
+                       tr("<h2>MY table</h2><p>Sumelt</p>"));
+
+}
+
+

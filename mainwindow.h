@@ -4,9 +4,13 @@
 #include <QMainWindow>
 #include <QMenu>
 #include <QAction>
+#include <QString>
+#include <QObject>
 #include <QIcon>
 #include <QToolBar>
+#include <QLabel>
 #include <QStatusBar>
+#include <QMessageBox>
 #include <QKeySequence>
 #include "SpreadSheet.h"
 
@@ -32,11 +36,16 @@ public:
     void CreateOptionAction();
     void CreateAboutAction();
 
-    
-private:
-    //Ui::MainWindow *ui;
 
+private slots:
+    void aboutInfoMBox();
+    void updataBarPosition();
+
+private:
+    /**SpreadSheet**/
     SpreadSheet *mytable;
+
+    /**Menu**/
     QMenu *FileMenu;
     QMenu *EditMenu;
     QMenu *SelectEditMenu;
@@ -45,6 +54,7 @@ private:
     QMenu *HelpMenu;
     QMenu *SelectSubEditMenu;
 
+    /**Action**/
     QAction *newFile;
     QAction *openFile;
     QAction *saveFile;
@@ -65,14 +75,18 @@ private:
     QAction *recalTools;
     QAction *sortTools;
 
-    //QAction *showgridOption;
-    //QAction *autorecalOption;
-    QAction *NoneOption;
+    QAction *showGridOption;
+    QAction *autoRecalcOption;
+    //QAction *NoneOption;
 
     QAction *aboutHelp;
 
+    /**Bar**/
     QToolBar *FileToolBar;
     QToolBar *EditeToolBar;
+
+    /**Label**/
+    QLabel *LocationLable;
 };
 
 #endif // MAINWINDOW_H

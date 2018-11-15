@@ -5,7 +5,8 @@
 class SpreadSheet : public QTableWidget
 {
 public:
-    SpreadSheet(QWidget *parent = 0);
+    SpreadSheet();
+    QString GetCurrentStatusBar();
 
 private:
     enum{RowCount = 99, ColumCount = 26};

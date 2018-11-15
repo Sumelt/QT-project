@@ -1,6 +1,6 @@
 #include "SpreadSheet.h"
 #include <QString>
-SpreadSheet::SpreadSheet(QWidget *parent)
+SpreadSheet::SpreadSheet()
 {
     setRowCount(0);
     setColumnCount(0);
@@ -15,4 +15,11 @@ SpreadSheet::SpreadSheet(QWidget *parent)
         setHorizontalHeaderItem(i, item);
     }
 
+}
+
+QString SpreadSheet::GetCurrentStatusBar()
+{
+    QString data = QChar(currentColumn()+'A')
+                    +QString::number(currentRow()+1);
+    return data;
 }
