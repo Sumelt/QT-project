@@ -25,7 +25,7 @@ class MainWindow : public QMainWindow
 public:
     //explicit MainWindow(QWidget *parent = 0);
     //~MainWindow();
-    MainWindow();
+    MainWindow(MainWindow* parent = 0);
     void CreateMenu();
     void CreateAction();
     void CreateToolBar();
@@ -35,11 +35,14 @@ public:
     void CreateToolsAction();
     void CreateOptionAction();
     void CreateAboutAction();
+    void CreateContextMenuAction();
+    bool oktoContinue();
 
 
 private slots:
     void aboutInfoMBox();
     void updataBarPosition();
+    void NewSpreadSheet();
 
 private:
     /**SpreadSheet**/
@@ -77,7 +80,6 @@ private:
 
     QAction *showGridOption;
     QAction *autoRecalcOption;
-    //QAction *NoneOption;
 
     QAction *aboutHelp;
 

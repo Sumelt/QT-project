@@ -15,7 +15,7 @@ MainWindow::~MainWindow()
 }
 */
 
-MainWindow::MainWindow()
+MainWindow::MainWindow(MainWindow* parent)
 {
     mytable = new SpreadSheet;
     setCentralWidget(mytable);
@@ -89,6 +89,7 @@ void MainWindow::CreateAction()
     CreateToolsAction();
     CreateOptionAction();
     CreateAboutAction();
+    CreateContextMenuAction();
 }
 
 
@@ -99,6 +100,7 @@ void MainWindow::CreateFileAction()
     newFile->setIcon(QIcon("./img/new.png"));
     newFile->setShortcut(QKeySequence::New);
     newFile->setStatusTip("Create A New SpreadSheeet");
+    connect(newFile, SIGNAL(triggered()), this, SLOT(NewSpreadSheet()));
 
     openFile = new QAction("&Open", this);
     openFile->setIcon(QIcon("./img/open.png"));
@@ -130,20 +132,24 @@ void MainWindow::CreateEditAction()
     cutEdit->setIcon(QIcon("./img/cut.png"));
     cutEdit->setShortcut(QKeySequence::Cut);
     cutEdit->setStatusTip("Cut Data");
+    connect(cutEdit, SIGNAL(triggered()), mytable, SLOT(Cut()));
 
     copyEdit = new QAction("&Copy", this);
     copyEdit->setIcon(QIcon("./img/copy.png"));
     copyEdit->setShortcut(QKeySequence::Copy);
     copyEdit->setStatusTip("Copy Data");
+    connect(copyEdit, SIGNAL(triggered()), mytable, SLOT(Copy()));
 
     pasteEdit = new QAction("&Paste", this);
     pasteEdit->setIcon(QIcon("./img/paste.png"));
     pasteEdit->setShortcut(QKeySequence::Paste);
     pasteEdit->setStatusTip("Paste Data");
+    connect(pasteEdit, SIGNAL(triggered()), mytable, SLOT(Paste()));
 
     deleteEdit = new QAction("&Delete", this);
     deleteEdit->setShortcut(QKeySequence::Delete);
     deleteEdit->setStatusTip("Delete Data");
+    connect(deleteEdit, SIGNAL(triggered()), mytable, SLOT(Delete()));
 
     rowSelectEdit = new QAction("&Row", this);
     columnSelectEdit = new QAction("&Column", this);
@@ -193,7 +199,6 @@ void MainWindow::CreateOptionAction()
 void MainWindow::CreateAboutAction()
 {
     aboutHelp = new QAction("&About", this);
-    aboutHelp->setCheckable(true);
     connect(aboutHelp, SIGNAL(triggered()), this, SLOT(aboutInfoMBox()));
 }
 
@@ -235,4 +240,42 @@ void MainWindow::aboutInfoMBox()
 
 }
 
+bool MainWindow::oktoContinue()
+{
+    if(isWindowModified())
+    {
+        int res = QMessageBox::warning(this, tr("Warning"), tr("Save?"),
+                             QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel);
 
+        if(res == QMessageBox::Yes)
+            return true;
+        else if(res == QMessageBox::Cancel)
+            return false;
+    }
+    return true;
+}
+
+void MainWindow::NewSpreadSheet()
+{
+    if(oktoContinue())
+    {
+          mytable->IntSpreadSheet();
+//        MainWindow *w2 = new MainWindow(this);
+//        SpreadSheet *sheet = new SpreadSheet();
+//        w2->setCentralWidget(sheet);
+//        w2->show();
+
+    }
+}
+
+void MainWindow::CreateContextMenuAction()
+{
+    mytable->addAction(copyEdit);
+    mytable->addAction(pasteEdit);
+    mytable->addAction(cutEdit);
+    mytable->addAction(deleteEdit);
+
+    //mytable->setContextMenuPolicy(Qt::noc);
+    mytable->setContextMenuPolicy(Qt::ActionsContextMenu);
+
+}
