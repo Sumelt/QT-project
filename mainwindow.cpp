@@ -15,6 +15,7 @@ MainWindow::~MainWindow()
 }
 */
 
+
 MainWindow::MainWindow(MainWindow* parent)
 {
     mytable = new SpreadSheet;
