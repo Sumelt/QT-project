@@ -15,6 +15,7 @@ MainWindow::~MainWindow()
 }
 */
 
+class SpreadSheet;
 
 MainWindow::MainWindow(MainWindow* parent)
 {
@@ -29,8 +30,8 @@ MainWindow::MainWindow(MainWindow* parent)
     setWindowTitle("MY SpreadSheet");
     setWindowIcon(QIcon("./img/myico.ico"));
 
-    resize(1000,500);
-    move(250,250);
+    resize(1300,800);
+    move(400,250);
 }
 
 
@@ -161,10 +162,12 @@ void MainWindow::CreateEditAction()
     findEdit->setIcon(QIcon("./img/find.png"));
     findEdit->setShortcut(QKeySequence::Find);
     findEdit->setStatusTip("Find Data");
+    connect(findEdit, SIGNAL(triggered()), this, SLOT(find()));
 
     gotocellEdit = new QAction("&GoTo Cell", this);
     gotocellEdit->setIcon(QIcon("./img/gotocell.png"));
     gotocellEdit->setStatusTip("Gotocell Data");
+    connect(gotocellEdit, SIGNAL(triggered()), this, SLOT(gotocell()));
 }
 
 /**Tool Action**/
@@ -184,9 +187,12 @@ void MainWindow::CreateOptionAction()
 {
     showGridOption = new QAction(tr("&Show Grid"), this);
     showGridOption->setCheckable(true);
+    showGridOption->setChecked(true);
     //showGridOption->setChecked(spreadsheet->showGrid());
     showGridOption->setStatusTip(tr("Show or hide the spreadsheet's "
                                         "grid"));
+    connect(showGridOption, SIGNAL(toggled(bool)), this, SLOT(showGrid(bool)));
+
     autoRecalcOption = new QAction("&Auto-Recalculate", this);
     autoRecalcOption = new QAction(tr("&Auto-Recalculate"), this);
     autoRecalcOption->setCheckable(true);
@@ -280,3 +286,52 @@ void MainWindow::CreateContextMenuAction()
     mytable->setContextMenuPolicy(Qt::ActionsContextMenu);
 
 }
+
+void MainWindow::find()
+{
+    if(!findDialog)
+    {
+        findDialog = new FindDialog(this);
+
+        //connect button siganl to sheet about next
+        connect(findDialog, SIGNAL(findNext(const QString &str, Qt::CaseSensitivity cs)),
+                mytable, SLOT(findNext(const QString &str, Qt::CaseSensitivity cs)));
+        //connect button siganl to sheet about previous
+        //connect(findDialog, SIGNAL(findPrevious(const QString &str, Qt::CaseSensitivity cs)),
+                //mytable, SLOT(findPrevious(const QString &str, Qt::CaseSensitivity cs)));
+    }
+
+    findDialog->show();
+    findDialog->raise();
+    findDialog->activateWindow();
+
+}
+
+
+void MainWindow::gotocell()
+{
+    GoToCellDialog *gotocellDialog = new GoToCellDialog(this);
+    if(gotocellDialog->exec())
+    {
+        QString str = gotocellDialog->lineEdit->text().toUpper();
+        mytable->setCurrentCell(str.mid(1).toInt()-1, str[0].unicode()-'A');
+    }
+    delete gotocellDialog;
+}
+
+void MainWindow::hideSpreadSheet()
+{
+    //mytable->hide();
+    //mytable->setShowGrid(false);
+    QPalette pal = mytable->palette();
+    pal.setBrush(QPalette::Base,QBrush(QColor(255,255,255,0)));
+    mytable->setPalette(pal);
+}
+
+void MainWindow::showGrid(bool flag)
+{
+    if(flag)
+        mytable->setShowGrid(true);
+    else mytable->setShowGrid(false);
+}
+

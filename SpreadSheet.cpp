@@ -58,3 +58,32 @@ void SpreadSheet::Delete()
     item->setText("");
     setItem(currentRow(), currentColumn(), item);
 }
+
+void SpreadSheet::findNext(const QString &str, Qt::CaseSensitivity cs)
+{
+    int j = currentColumn();
+    //QTableWidgetItem *item = new QTableWidgetItem;
+
+    //for(int i = currentRow(); i<RowCount; i++)
+    //{
+       qDebug()<<j;
+//        for( ; j<ColumCount; j++)
+//        {
+//            if(item(i, j))
+//            {
+//                 QString cmp = item(i, j)->text();
+
+//                 cmp.contains(str, cs);
+//                 clearSelection();
+//                 setCurrentCell(i, j);
+//                 activateWindow();
+
+//                 return;
+//            }
+
+//        }
+
+//        j = 0;
+//    }
+
+}

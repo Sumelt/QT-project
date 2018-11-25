@@ -12,7 +12,11 @@
 #include <QStatusBar>
 #include <QMessageBox>
 #include <QKeySequence>
+#include <QPalette>
 #include "SpreadSheet.h"
+#include "FindDialog.h"
+#include "gotocell.h"
+
 
 namespace Ui {
 class MainWindow;
@@ -37,16 +41,28 @@ public:
     void CreateAboutAction();
     void CreateContextMenuAction();
     bool oktoContinue();
+    void hideSpreadSheet();
 
 
 private slots:
     void aboutInfoMBox();
     void updataBarPosition();
     void NewSpreadSheet();
+    void find();
+    void gotocell();
+    void showGrid(bool);
+
+    //void gotocell();
 
 private:
     /**SpreadSheet**/
     SpreadSheet *mytable;
+
+    /**FindDialog**/
+    FindDialog *findDialog;
+
+    /**GoToCell**/
+    //GoToCellDialog *gotocellDialog;
 
     /**Menu**/
     QMenu *FileMenu;
@@ -89,6 +105,8 @@ private:
 
     /**Label**/
     QLabel *LocationLable;
+
+
 };
 
 #endif // MAINWINDOW_H
