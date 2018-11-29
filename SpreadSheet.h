@@ -7,7 +7,6 @@
 #include <Qt>
 #include <QDebug>
 
-
 class SpreadSheet : public QTableWidget
 {
     Q_OBJECT
