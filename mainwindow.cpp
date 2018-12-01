@@ -201,7 +201,6 @@ void MainWindow::CreateOptionAction()
                                           "off"));
 }
 
-
 /**About Action**/
 void MainWindow::CreateAboutAction()
 {
