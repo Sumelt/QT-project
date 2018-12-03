@@ -84,7 +84,6 @@ private:
     QAction *copyEdit;
     QAction *pasteEdit;
     QAction *deleteEdit;
-    QAction *selectEdit;
     QAction *findEdit;
     QAction *gotocellEdit;
     QAction *rowSelectEdit;

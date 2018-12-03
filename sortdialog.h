@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QObject>
+#include <FindDialog.h>
 #include "ui_sortdialog.h"
 
 namespace Ui {

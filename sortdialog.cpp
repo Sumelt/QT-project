@@ -59,6 +59,7 @@ void mysortDialog :: setColumnRange(QChar first, QChar last)
         secondaryColumnCombo->addItem(QString(ch));
         tertiaryColumnCombo->addItem(QString(ch));
         ch = ch.unicode()+1;
+        qDebug()<<ch;
     }
 
 }

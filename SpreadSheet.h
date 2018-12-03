@@ -7,6 +7,7 @@
 #include <Qt>
 #include <QDebug>
 
+
 class SpreadSheet : public QTableWidget
 {
     Q_OBJECT
@@ -19,15 +20,13 @@ public:
 private:
     enum{RowCount = 99, ColumCount = 26};
 
-signals:
-
 public slots:
     void Copy();
     void Paste();
     void Cut();
     void Delete();
+    void findPrevious(const QString &str, Qt::CaseSensitivity cs);
     void findNext(const QString &str, Qt::CaseSensitivity cs);
-    //void findPrevious(const QString &str, Qt::CaseSensitivity cs);
 
 };
 

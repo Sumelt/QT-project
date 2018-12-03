@@ -61,29 +61,53 @@ void SpreadSheet::Delete()
 
 void SpreadSheet::findNext(const QString &str, Qt::CaseSensitivity cs)
 {
-    int j = currentColumn();
-    //QTableWidgetItem *item = new QTableWidgetItem;
+    int row = currentRow();
+    int column = currentColumn() + 1;
 
-    //for(int i = currentRow(); i<RowCount; i++)
-    //{
-       qDebug()<<j;
-//        for( ; j<ColumCount; j++)
-//        {
-//            if(item(i, j))
-//            {
-//                 QString cmp = item(i, j)->text();
+        while (row <= RowCount) {
+            while (column <= ColumCount) {
 
-//                 cmp.contains(str, cs);
-//                 clearSelection();
-//                 setCurrentCell(i, j);
-//                 activateWindow();
+                if (item(row, column)) {
+                    if(item(row, column)->text().contains(str, cs)){
 
-//                 return;
-//            }
+                        clearSelection();
+                        setCurrentCell(row, column);
+                        activateWindow();
+                        return;
+                    }
 
-//        }
-
-//        j = 0;
-//    }
+                }
+                ++column;
+            }
+            column = 0;
+            ++row;
+        }
 
 }
+
+void SpreadSheet::findPrevious(const QString &str, Qt::CaseSensitivity cs)
+{
+    int row = currentRow();
+    int column = currentColumn() - 1;
+
+        while (row >= 0) {
+            while (column >= 0) {
+
+                if (item(row, column)) {
+                    if(item(row, column)->text().contains(str, cs)){
+
+                        clearSelection();
+                        setCurrentCell(row, column);
+                        activateWindow();
+                        return;
+                    }
+
+                }
+                --column;
+            }
+            column = ColumCount;
+            --row;
+        }
+}
+
+

@@ -54,16 +54,15 @@ void MainWindow::CreateMenu()
     EditMenu->addAction(copyEdit);
     EditMenu->addAction(pasteEdit);
     EditMenu->addAction(deleteEdit);
-    EditMenu->addAction(selectEdit);
 
-    SelectEditMenu = menuBar()->addMenu("&Select");
+    SelectEditMenu = EditMenu->addMenu("&Select");
     SelectEditMenu->addAction(rowSelectEdit);
     SelectEditMenu->addAction(columnSelectEdit);
     SelectEditMenu->addAction(allSelectEdit);
-    EditMenu->addMenu(SelectEditMenu);
+    //EditMenu->addMenu(SelectEditMenu);
 
-    EditMenu->addAction(findEdit);
     EditMenu->addSeparator();
+    EditMenu->addAction(findEdit);   
     EditMenu->addAction(gotocellEdit);
 
     /**tools**/
@@ -153,6 +152,10 @@ void MainWindow::CreateEditAction()
     deleteEdit->setStatusTip("Delete Data");
     connect(deleteEdit, SIGNAL(triggered()), mytable, SLOT(Delete()));
 
+    //selectEdit = new QAction("&Seclect", this);
+    //selectEdit->setShortcut(QKeySequence::Select);
+    //selectEdit->setStatusTip("Select Data");
+
     rowSelectEdit = new QAction("&Row", this);
     columnSelectEdit = new QAction("&Column", this);
     allSelectEdit = new QAction("&All", this);
@@ -200,6 +203,7 @@ void MainWindow::CreateOptionAction()
     autoRecalcOption->setStatusTip(tr("Switch auto-recalculation on or "
                                           "off"));
 }
+
 
 /**About Action**/
 void MainWindow::CreateAboutAction()
@@ -293,11 +297,13 @@ void MainWindow::find()
         findDialog = new FindDialog(this);
 
         //connect button siganl to sheet about next
-        connect(findDialog, SIGNAL(findNext(const QString &str, Qt::CaseSensitivity cs)),
-                mytable, SLOT(findNext(const QString &str, Qt::CaseSensitivity cs)));
+         connect(findDialog, SIGNAL(findNext(QString,Qt::CaseSensitivity)),
+                 mytable, SLOT(findNext(QString,Qt::CaseSensitivity)));
+
         //connect button siganl to sheet about previous
-        //connect(findDialog, SIGNAL(findPrevious(const QString &str, Qt::CaseSensitivity cs)),
-                //mytable, SLOT(findPrevious(const QString &str, Qt::CaseSensitivity cs)));
+        connect(findDialog, SIGNAL(findPrevious(QString,Qt::CaseSensitivity)),
+                mytable, SLOT(findPrevious(QString,Qt::CaseSensitivity)));
+        \
     }
 
     findDialog->show();
