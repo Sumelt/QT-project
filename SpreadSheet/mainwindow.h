@@ -13,10 +13,11 @@
 #include <QMessageBox>
 #include <QKeySequence>
 #include <QPalette>
+#include <QFileDialog>
 #include "SpreadSheet.h"
 #include "FindDialog.h"
 #include "gotocell.h"
-
+#include <QDebug>
 
 namespace Ui {
 class MainWindow;
@@ -41,7 +42,7 @@ public:
     void CreateAboutAction();
     void CreateContextMenuAction();
     bool oktoContinue();
-    void hideSpreadSheet();
+    void hideSpreadSheet(); //test
 
 
 private slots:
@@ -51,8 +52,7 @@ private slots:
     void find();
     void gotocell();
     void showGrid(bool);
-
-    //void gotocell();
+    void opend();
 
 private:
     /**SpreadSheet**/
@@ -60,9 +60,6 @@ private:
 
     /**FindDialog**/
     FindDialog *findDialog;
-
-    /**GoToCell**/
-    //GoToCellDialog *gotocellDialog;
 
     /**Menu**/
     QMenu *FileMenu;
@@ -104,7 +101,6 @@ private:
 
     /**Label**/
     QLabel *LocationLable;
-
 
 };
 

@@ -1,19 +1,6 @@
 #include "mainwindow.h"
 #include "SpreadSheet.h"
 #include "ui_mainwindow.h"
-/*
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
-{
-    ui->setupUi(this);
-}
-
-MainWindow::~MainWindow()
-{
-    delete ui;
-}
-*/
 
 class SpreadSheet;
 
@@ -107,6 +94,7 @@ void MainWindow::CreateFileAction()
     openFile->setIcon(QIcon("./img/open.png"));
     openFile->setShortcut(QKeySequence::Open);
     openFile->setStatusTip("Open A New SpreadSheeet");
+    connect(openFile, SIGNAL(triggered()), this, SLOT(opend()));
 
     saveFile = new QAction("&Save", this);
     saveFile->setIcon(QIcon("./img/save.png"));
@@ -252,29 +240,31 @@ void MainWindow::aboutInfoMBox()
 
 bool MainWindow::oktoContinue()
 {
-    if(isWindowModified())
-    {
-        int res = QMessageBox::warning(this, tr("Warning"), tr("Save?"),
-                             QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel);
-
-        if(res == QMessageBox::Yes)
-            return true;
-        else if(res == QMessageBox::Cancel)
-            return false;
-    }
-    return true;
+    //qDebug()<<mytable->isWindowModified();
+    if (mytable->isWindowModified()) {
+            int r = QMessageBox::warning(this, tr("Spreadsheet"),
+                            tr("The document has been modified.\n"
+                               "Do you want to save your changes?"),
+                            QMessageBox::Yes | QMessageBox::No
+                            | QMessageBox::Cancel);
+            if (r == QMessageBox::Yes) {
+                return true;//save();
+            } else if (r == QMessageBox::Cancel) {
+                return false;
+            }
+        }
+        return true;
 }
 
 void MainWindow::NewSpreadSheet()
 {
     if(oktoContinue())
     {
-          mytable->IntSpreadSheet();
-//        MainWindow *w2 = new MainWindow(this);
-//        SpreadSheet *sheet = new SpreadSheet();
-//        w2->setCentralWidget(sheet);
-//        w2->show();
-
+          //mytable->IntSpreadSheet();
+          //mytable->clear();
+          //setCurrentFile("");
+        MainWindow *newWindow = new MainWindow;
+        newWindow->show();
     }
 }
 
@@ -312,7 +302,6 @@ void MainWindow::find()
 
 }
 
-
 void MainWindow::gotocell()
 {
     GoToCellDialog *gotocellDialog = new GoToCellDialog(this);
@@ -326,8 +315,6 @@ void MainWindow::gotocell()
 
 void MainWindow::hideSpreadSheet()
 {
-    //mytable->hide();
-    //mytable->setShowGrid(false);
     QPalette pal = mytable->palette();
     pal.setBrush(QPalette::Base,QBrush(QColor(255,255,255,0)));
     mytable->setPalette(pal);
@@ -340,3 +327,13 @@ void MainWindow::showGrid(bool flag)
     else mytable->setShowGrid(false);
 }
 
+void MainWindow::opend()
+{
+    if(!oktoContinue())
+    {
+        QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
+                "." ,tr("Spreadsheet File (*.sp)"));
+        //if(!fileName.isEmpty())
+            //loadFile(fileName);
+    }
+}
