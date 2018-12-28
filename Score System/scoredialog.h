@@ -23,6 +23,7 @@ public:
     void InitMessage();
     void Connect();
     void InfoMBox(QString);
+    bool okContinue();
 
 
 private:
@@ -50,6 +51,7 @@ public slots:
     void New();
     void aboutInfoMBox();
     void alterButtonText(bool);
+    void enableLineEdit();
 
 };
 

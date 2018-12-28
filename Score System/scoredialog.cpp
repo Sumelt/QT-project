@@ -1,14 +1,13 @@
 #include "scoredialog.h"
 
+static bool flag = false;
+
 ScoreDialog::ScoreDialog(QWidget *parent) : QMainWindow(parent)
 {
-    //setupUi(this);
-
     CreateDialog(this);
     CreateMenu(this);
     InitMessage();
     Connect();
-
 }
 
 void ScoreDialog::CreateDialog(ScoreDialog *parent)
@@ -32,7 +31,7 @@ void ScoreDialog::CreateDialog(ScoreDialog *parent)
 
     /*----------------GleftLayout-----------------------------*/
     lineEdit = new QLineEdit;
-    lineEdit->setEnabled(true);
+    lineEdit->setEnabled(false);
     tableWidget = new QTableWidget;
 
     lables <<tr("Name") <<tr("Age") <<tr("Class") <<tr("Number") <<tr("Score");
@@ -89,8 +88,6 @@ void ScoreDialog::CreateAction(ScoreDialog *parent)
 
     helpActionHelp = new QAction(tr("&About"),  parent);
 
-
-
 }
 
 void ScoreDialog::InitMessage()
@@ -104,18 +101,27 @@ void ScoreDialog::InitMessage()
     AddMessage(str);
 }
 
+void ScoreDialog::insert()
+{
+    QString str = lineEdit->text();
+    if(flag)
+        AddMessage(str);
+
+}
+
 void ScoreDialog::AddMessage(QString str)
 {
     QStringList list = str.split(" ");
     QString tmp;
 
-    for(int i = 0; i<list.size(); i++)
+    for(int i = 0; i<list.length(); i++)
     {
        tmp = list[i];
        tableWidget->setItem(tableWidget->rowCount()-1, i, new QTableWidgetItem(tmp));
        tmp.clear();
     }
     tableWidget->insertRow(tableWidget->rowCount());
+
 }
 
 void ScoreDialog::InfoMBox(QString str)
@@ -128,13 +134,6 @@ void ScoreDialog::aboutInfoMBox()
 {
     QMessageBox::about(this, tr("About"),
                     tr("<h2>Score System</h2><p>Author: Su </p>"));
-}
-
-void ScoreDialog::insert()
-{
-    QString str = lineEdit->text();
-    AddMessage(str);
-
 }
 
 void ScoreDialog::Find()
@@ -168,7 +167,6 @@ void ScoreDialog::Find()
     }
 }
 
-
 void ScoreDialog::Deleter()
 {
    QString text = lineEdit->text();
@@ -191,9 +189,27 @@ void ScoreDialog::Deleter()
 
 }
 
+bool ScoreDialog::okContinue()
+{
+    if(isWindowModified())
+    {
+        int r = QMessageBox::warning(this, tr("Score System"),
+                                     tr("There is unsaved information. Is it new?"),
+                                     QMessageBox::Yes | QMessageBox::No);
+       if (r == QMessageBox::Yes)
+            return true;
+       else if (r == QMessageBox::Cancel)
+            return false;
+    }
+    return true;
+}
+
 void ScoreDialog::New()
 {
-
+    if(okContinue())
+    {
+        tableWidget->clear();
+    }
 }
 
 void ScoreDialog::alterButtonText(bool flag)
@@ -205,28 +221,31 @@ void ScoreDialog::alterButtonText(bool flag)
     }
     else
         findButton->setText(tr("Show All"));
+}
 
+void ScoreDialog::enableLineEdit()
+{
+    lineEdit->setEnabled(true);
+    flag = true;
 }
 
 void ScoreDialog::Connect()
 {
     connect(newActionFile,SIGNAL(triggered()), this, SLOT(New()));
     connect(exitActionFile, SIGNAL(triggered()), this, SLOT(close()));
-
     connect(deleterActionEdit,SIGNAL(triggered()), this, SLOT(Deleter()));
     connect(findActionEdit,SIGNAL(triggered()), this, SLOT(Find()));
     connect(insertActionEdit,SIGNAL(triggered()), this, SLOT(insert()));
-
     connect(helpActionHelp,SIGNAL(triggered()), this, SLOT(aboutInfoMBox()));
 
     connect(deleterButton,SIGNAL(clicked()), this, SLOT(Deleter()));
-
     connect(findButton,SIGNAL(clicked()), this, SLOT(Find()));
-    connect(findButton, SIGNAL(toggled(bool)), this, SLOT(alterButtonText(bool)));
-
+    connect(findButton, SIGNAL(toggled(bool)), this, SLOT(alterButtonText(bool)));     
     connect(insertButton,SIGNAL(clicked()), this, SLOT(insert()));
 
-
+    connect(insertButton,SIGNAL(clicked()), this, SLOT(enableLineEdit()));
+    //connect(findButton,SIGNAL(clicked()), this, SLOT(enableLineEdit()));
+    //connect(deleterButton,SIGNAL(clicked()), this, SLOT(enableLineEdit()));
 }
 
 ScoreDialog::~ScoreDialog()
