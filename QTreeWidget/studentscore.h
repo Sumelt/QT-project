@@ -4,10 +4,6 @@
 #include <QMainWindow>
 #include "ui_studentscore.h"
 
-//namespace Ui {
-//class StudentScore;
-//}
-
 class StudentScore : public QMainWindow, Ui_StudentScore
 {
     Q_OBJECT
