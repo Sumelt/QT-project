@@ -252,3 +252,21 @@ ScoreDialog::~ScoreDialog()
 {
     
 }
+
+/*
+读取之前保存的窗口大小和状态信息：
+QSettings settings("Software Inc.", "Mail Client"); //一一对应
+settings.beginGroup("mainWindow");开始，一一对应
+(QWidget)restoreGeometry(settings.value("geometry").toByteArray()); //恢复几何布局和状态,返回状态为bool类型
+mainSplitter->restoreState(settings.value("mainSplitter").toByteArray()); //恢复拆分器
+rightSplitter->restoreState(settings.value("rightSplitter").toByteArray()); //恢复拆分器
+settings.endGroup(); //结束
+
+
+保存之前保存的窗口大小和状态信息：
+QSettings settings("Software Inc.", "Mail Client");//要保存的配置文件名，应用名，读时候要一一对应
+settings.beginGroup("mainWindow"); //开始保存，读取一一对应
+settings.setValue("geometry", saveGeometry()); //保存顶级窗口小部件的当前几何和状态
+settings.setValue("mainSplitter", mainSplitter->saveState()); //保存拆分器布局的状态
+settings.setValue("rightSplitter", rightSplitter->saveState());//保存拆分器布局的状态
+settings.endGroup(); //结束保存*/
